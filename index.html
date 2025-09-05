@@ -2,7 +2,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tarea. Ley de senos y cosenos. Todas sus alternativas</title>
+<title>Cuestionario Interactivo de Triángulos</title>
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 <script id="MathJax-script" async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
@@ -12,8 +12,10 @@
   .question { margin-bottom: 30px; }
   .triangle { margin: 10px 0; }
   .triangle img { display: block; margin-bottom: 10px; max-width:200px; }
-  button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+  button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin-top: 10px;}
   .result { font-weight: bold; margin-top: 20px; }
+  .correct { color: green; font-weight: bold; }
+  .incorrect { color: red; font-weight: bold; }
 </style>
 </head>
 <body>
@@ -30,31 +32,24 @@
 
 <script>
 const quizData = [
-  // Tipo 1: dos lados y ángulo entre ellos, pide lado opuesto
-  {question: "Si \\(a=7\\), \\(b=10\\) y \\(\\theta=60^\\circ\\), calcula \\(c\\):",
+  {question: "Si \\(a=7\\), \\(b=10\\) y \\(\\gamma=60^\\circ\\), calcula \\(c\\):",
    options:["12","8.66","9"], answer:"8.66"},
-  {question: "Si \\(a=5\\), \\(b=8\\) y \\(\\theta=45^\\circ\\), calcula \\(c\\):",
+  {question: "Si \\(a=5\\), \\(b=8\\) y \\(\\gamma=45^\\circ\\), calcula \\(c\\):",
    options:["5.66","6.5","7"], answer:"5.66"},
-  {question: "Si \\(a=9\\), \\(b=6\\) y \\(\\theta=120^\\circ\\), calcula \\(c\\):",
+  {question: "Si \\(a=9\\), \\(b=6\\) y \\(\\gamma=120^\\circ\\), calcula \\(c\\):",
    options:["13.0","12.0","10.5"], answer:"13.0"},
-
-  // Tipo 2: todos los lados, pide ángulo
   {question: "Lados \\(a=7\\), \\(b=9\\), \\(c=12\\). Calcula \\(\\alpha\\):",
    options:["30.6","45.2","60.1"], answer:"30.6"},
   {question: "Lados \\(a=8\\), \\(b=15\\), \\(c=17\\). Calcula \\(\\beta\\):",
    options:["28.1","32.5","45.0"], answer:"32.5"},
-  {question: "Lados \\(a=6\\), \\(b=8\\), \\(c=10\\). Calcula \\(\\theta\\):",
+  {question: "Lados \\(a=6\\), \\(b=8\\), \\(c=10\\). Calcula \\(\\gamma\\):",
    options:["53.1","41.4","90"], answer:"90"},
-
-  // Tipo 3: dos lados y ángulo opuesto a uno, pide ángulo opuesto al otro lado
   {question: "Si \\(a=5\\), \\(b=7\\), \\(\\alpha=40^\\circ\\), calcula \\(\\beta\\):",
    options:["49.4","45.0","42.1"], answer:"49.4"},
   {question: "Si \\(a=9\\), \\(b=12\\), \\(\\alpha=50^\\circ\\), calcula \\(\\beta\\):",
    options:["57.1","60.0","55.2"], answer:"57.1"},
   {question: "Si \\(a=6\\), \\(b=8\\), \\(\\alpha=35^\\circ\\), calcula \\(\\beta\\):",
    options:["46.4","42.0","40.5"], answer:"46.4"},
-
-  // Tipo 4: dos ángulos y un lado, pide lado opuesto a un ángulo
   {question: "Si \\(\\alpha=40^\\circ\\), \\(\\beta=60^\\circ\\), \\(a=8\\), calcula \\(b\\):",
    options:["11.3","10.0","12.0"], answer:"11.3"},
   {question: "Si \\(\\alpha=50^\\circ\\), \\(\\beta=70^\\circ\\), \\(a=10\\), calcula \\(b\\):",
@@ -63,27 +58,37 @@ const quizData = [
    options:["8.49","7.5","9.0"], answer:"8.49"},
 ];
 
-// Generar preguntas con imagen y opciones
 const container = document.getElementById("questions");
 quizData.forEach((q,index)=>{
   const div = document.createElement("div");
   div.classList.add("question");
+  div.id = `q${index+1}`;
   div.innerHTML = `
     <p>${index+1}. ${q.question}</p>
     <div class="triangle">
       <img src="Triangulo${index+1}.png" alt="Triángulo ${index+1}">
     </div>
     ${q.options.map(opt => `<input type="radio" name="q${index+1}" value="${opt}"> ${opt}<br>`).join('')}
+    <p class="feedback" id="feedback${index+1}"></p>
   `;
   container.appendChild(div);
 });
 
-// Verificar respuestas
 function checkAnswers() {
   let score = 0;
   quizData.forEach((q,index)=>{
     const selected = document.querySelector(`input[name="q${index+1}"]:checked`);
-    if(selected && selected.value===q.answer) score++;
+    const feedback = document.getElementById(`feedback${index+1}`);
+    if(selected){
+      if(selected.value === q.answer){
+        score++;
+        feedback.innerHTML = `<span class="correct">Correcto ✅</span>`;
+      } else {
+        feedback.innerHTML = `<span class="incorrect">Incorrecto ❌. La respuesta correcta es ${q.answer}</span>`;
+      }
+    } else {
+      feedback.innerHTML = `<span class="incorrect">No seleccionaste respuesta. La correcta es ${q.answer}</span>`;
+    }
   });
   document.getElementById("result").textContent = `Tu calificación: ${score} de ${quizData.length}`;
 }

@@ -2,7 +2,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cuestionario Interactivo de Triángulos</title>
+<title>Tarea. Ley de senos y cosenos (Todas las posibilidadades)</title>
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 <script id="MathJax-script" async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
@@ -78,7 +78,7 @@ quizData.forEach((q, index) => {
   div.classList.add("question");
   div.innerHTML = `<p>${index+1}. ${q.question}</p>
                    <div class="triangle">
-                   <img src="triangulo${index+1}.png" alt="Triángulo ${index+1}" style="max-width:200px">
+                   <img src="Triangulo${index+1}.png" alt="Triángulo ${index+1}" style="max-width:200px">
                    </div>
                    ${q.options.map((opt,i)=>`<input type="radio" name="q${index+1}" value="${opt}"> ${opt}<br>`).join('')}`;
   container.appendChild(div);
